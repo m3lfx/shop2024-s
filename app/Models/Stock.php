@@ -10,5 +10,5 @@ class Stock extends Model
     use HasFactory;
     protected $table = 'stock';
     protected $primaryKey = 'item_id';
-    protected $timestamps = false;
+    public $timestamps = false;
 }
