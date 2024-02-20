@@ -13,4 +13,5 @@ class Item extends Model
     protected $table = 'item';
     protected $primaryKey = 'item_id';
     
+    
 }
