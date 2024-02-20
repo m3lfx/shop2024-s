@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\Stock;
 use Validator;
 use Storage;
+use DB;
 
 class ItemController extends Controller
 {
@@ -17,7 +18,8 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::all();
+        // $items = Item::all();
+        $items = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->get();
         return view('item.index', compact('items'));
     }
 

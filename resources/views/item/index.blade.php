@@ -14,7 +14,7 @@
                         <th>description</th>
                         <th>sell price</th>
                         <th>cost price</th>
-                        {{-- <th>quantity</th> --}}
+                        <th>quantity</th>
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
@@ -34,7 +34,7 @@
                             <td>{{ $item->description }}</td>
                             <td>{{ $item->sell_price }}</td>
                             <td>{{ $item->cost_price }}</td>
-                            {{-- <td>{{ $item->quantity }}</td> --}}
+                            <td>{{ $item->quantity }}</td>
                             @if ($item->deleted_at === null)
                                 <td><a href="{{route('items.edit', $item->item_id)}}"><i class="fas fa-edit"></i></a>
                                     <form action="{{route('items.destroy', $item->item_id)}}" method="POST">
