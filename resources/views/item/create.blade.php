@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        {!! Form::open(['route' => 'items.store', 'enctype' => 'multipart/form-data']) !!}
+        {!! Form::open(['route' => 'items.store', 'files' => true]) !!}
         {!! Form::label('description', 'Description') !!}
         {!! Form::text('description', null, ['class' => 'form-control']) !!}
         {!! Form::label('cost_price', 'cost price', ) !!}
@@ -17,6 +17,7 @@
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
         {!! Form::submit('submit', ['class' => 'btn btn-primary']) !!}
+        <a class="btn btn-secondary" href="{{route('items.index')}}" role="button">cancel</a>
         {!! Form::close() !!}
     </div>
 @endsection
