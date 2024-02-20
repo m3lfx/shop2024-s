@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        {!! Form::open(['route' => ['items.update', $item->item_id], 'enctype' => 'multipart/form-data',  'method' => 'PUT']) !!}
+        {!! Form::open(['route' => ['items.update', $item->item_id], 'files' => true,  'method' => 'PUT']) !!}
         {!! Form::label('description', 'Description') !!}
         {!! Form::text('description', $item->description, ['class' => 'form-control']) !!}
         {!! Form::label('cost_price', 'cost price', ) !!}
