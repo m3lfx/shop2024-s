@@ -176,7 +176,8 @@ class ItemController extends Controller
         
         Session::put('cart', $cart);
         // dd(Session::get('cart'));
-        $request->session()->save();
+        // $request->session()->save();
+        Session::save();
         // dd(Session::get('cart'));
       
         return redirect('/');
