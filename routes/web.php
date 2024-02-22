@@ -13,8 +13,5 @@ use App\Http\Controllers\ItemController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ItemController::class, 'getItems'])->name('getItems');
 Route::resource('items', ItemController::class);

@@ -158,4 +158,9 @@ class ItemController extends Controller
         Stock::destroy($id);
         return redirect()->route('items.index');
     }
+
+    public function getItems(){
+        $items = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->get();
+        return view('shop.index', compact('items'));
+    }
 }
