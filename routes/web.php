@@ -19,12 +19,7 @@ Route::get('add-to-cart/{id}', [ItemController::class, 'addToCart'])->name('addT
 Route::get('shopping-cart', [ItemController::class, 'getCart'])->name('getCart');
 Route::get('reduce/{id}', [ItemController::class, 'getReduceByOne'])->name('reduceByOne');
 
-// Route::get('reduce/{id}', [
-//     'uses' => 'productController@getReduceByOne',
-//     'as' => 'product.reduceByOne'
-// ]);
-// Route::get('remove/{id}', [
-//     'uses' => 'productController@getRemoveItem',
-//     'as' => 'product.remove'
-// ]);
+
+Route::get('remove/{id}', [
+    ItemController::class, 'getRemoveItem'])->name('removeItem');
 Route::resource('items', ItemController::class);

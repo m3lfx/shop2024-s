@@ -46,30 +46,30 @@ class ItemController extends Controller
         $rules = [
             'img_path' => 'mimes:jpg,bmp,png',
             'description' => 'required'
-           
+
         ];
-       
+
         $validator = Validator::make($request->all(), $rules);
-        
-         if ($validator->fails()) {
+
+        if ($validator->fails()) {
             return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
         $item = new Item();
         $item->description = $request->description;
         $item->sell_price = $request->sell_price;
         $item->cost_price = $request->cost_price;
-       
+
         $name = $request->file('img_path')->getClientOriginalName();
-        
+
 
         $path = Storage::putFileAs(
             'public/items/images',
             $request->file('img_path'),
             $name
         );
-        $item->img_path = 'storage/items/images/'.$name;
+        $item->img_path = 'storage/items/images/' . $name;
         $item->save();
 
         $stock = new Stock();
@@ -98,7 +98,7 @@ class ItemController extends Controller
      */
     public function edit($id)
     {
-        $item = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->where('item.item_id',$id)->first();
+        $item = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->where('item.item_id', $id)->first();
         // dd($items);
         return view('item.edit', compact('item'));
     }
@@ -115,34 +115,34 @@ class ItemController extends Controller
         $rules = [
             'img_path' => 'mimes:jpg,bmp,png',
             'sell_price' => 'max:999'
-           
+
         ];
-       
+
         $validator = Validator::make($request->all(), $rules);
-        
-         if ($validator->fails()) {
+
+        if ($validator->fails()) {
             return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
         $item = Item::find($id);
         $item->description = $request->description;
         $item->sell_price = $request->sell_price;
         $item->cost_price = $request->cost_price;
-       if($request->file('img_path')) {
-        $name = $request->file('img_path')->getClientOriginalName();
-        $path = Storage::putFileAs(
-            'public/items/images',
-            $request->file('img_path'),
-            $name
-        );
-        $item->img_path = 'storage/items/images/'.$name;
-       }
-      
+        if ($request->file('img_path')) {
+            $name = $request->file('img_path')->getClientOriginalName();
+            $path = Storage::putFileAs(
+                'public/items/images',
+                $request->file('img_path'),
+                $name
+            );
+            $item->img_path = 'storage/items/images/' . $name;
+        }
+
         $item->save();
 
         $stock = Stock::find($id);
-        
+
         $stock->quantity = $request->quantity;
         $stock->save();
         return redirect()->route('items.index');
@@ -161,29 +161,32 @@ class ItemController extends Controller
         return redirect()->route('items.index');
     }
 
-    public function getItems(){
+    public function getItems()
+    {
         $items = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->get();
         return view('shop.index', compact('items'));
     }
 
-    public function addToCart($id){
+    public function addToCart($id)
+    {
         $item = Item::find($id);
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
-      	// dd($oldCart);
+        // dd($oldCart);
         $cart = new Cart($oldCart);
         // dd($cart);
         $cart->add($item, $item->item_id);
-        
+
         Session::put('cart', $cart);
         // dd(Session::get('cart'));
         // $request->session()->save();
         Session::save();
         // dd(Session::get('cart'));
-      
+
         return redirect('/');
     }
 
-    public function getCart() {
+    public function getCart()
+    {
         if (!Session::has('cart')) {
             return view('shop.shopping-cart');
         }
@@ -192,16 +195,31 @@ class ItemController extends Controller
         return view('shop.shopping-cart', ['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
     }
 
-    public function getReduceByOne($id){
+    public function getReduceByOne($id)
+    {
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         $cart = new Cart($oldCart);
         $cart->reduceByOne($id);
-         if (count($cart->items) > 0) {
-            Session::put('cart',$cart);
+        if (count($cart->items) > 0) {
+            Session::put('cart', $cart);
             Session::save();
-        } else{
+        } else {
             Session::forget('cart');
-        }        
+        }
+        return redirect()->route('getCart');
+    }
+
+    public function getRemoveItem($id)
+    {
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->removeItem($id);
+        if (count($cart->items) > 0) {
+            Session::put('cart', $cart);
+            Session::save();
+        } else {
+            Session::forget('cart');
+        }
         return redirect()->route('getCart');
     }
 }
