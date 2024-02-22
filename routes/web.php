@@ -21,5 +21,8 @@ Route::get('reduce/{id}', [ItemController::class, 'getReduceByOne'])->name('redu
 
 
 Route::get('remove/{id}', [
-    ItemController::class, 'getRemoveItem'])->name('removeItem');
+    ItemController::class, 'getRemoveItem'
+])->name('removeItem');
+
+Route::get('checkout', [ItemController::class, 'postCheckout'])->name('checkout');
 Route::resource('items', ItemController::class);
