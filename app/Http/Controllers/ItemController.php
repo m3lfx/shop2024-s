@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Stock;
+use App\Cart;
 use Validator;
 use Storage;
 use DB;
+use Session;
 
 class ItemController extends Controller
 {
@@ -162,5 +164,21 @@ class ItemController extends Controller
     public function getItems(){
         $items = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->get();
         return view('shop.index', compact('items'));
+    }
+
+    public function addToCart(Request $request , $id){
+        $item = Item::find($id);
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+      	// dd($oldCart);
+        $cart = new Cart($oldCart);
+        // dd($cart);
+        $cart->add($item, $item->item_id);
+        
+        Session::put('cart', $cart);
+        // dd(Session::get('cart'));
+        $request->session()->save();
+        // dd(Session::get('cart'));
+      
+        return redirect('/');
     }
 }

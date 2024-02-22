@@ -22,20 +22,20 @@ class Cart
             $this->items = $oldCart->items;
             $this->totalQty = $oldCart->totalQty;
             $this->totalPrice = $oldCart->totalPrice;
-            // dump($this->items);
+            // dd($this->items);
         }
     }
     public function add($item, $id)
     {
         // dd($this->items, $item, $id);
         $storedItem = ['qty' => 0, 'price' => $item->sell_price, 'item' => $item];
-        // dump($storedItem, $this->items);
+        // dd($storedItem, $this->items);
         if ($this->items) {
             if (array_key_exists($id, $this->items)) {
                 $storedItem = $this->items[$id];
             }
         }
-        dd($storedItem);
+        // dd($storedItem);
         //$storedItem['qty'] += $item->qty;
         $storedItem['qty']++;
         $storedItem['price'] = $item->sell_price * $storedItem['qty'];
