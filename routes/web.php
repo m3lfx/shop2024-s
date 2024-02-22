@@ -13,6 +13,18 @@ use App\Http\Controllers\ItemController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', [ItemController::class, 'getItems'])->name('getItems');
 Route::get('add-to-cart/{id}', [ItemController::class, 'addToCart'])->name('addToCart');
+Route::get('shopping-cart', [ItemController::class, 'getCart'])->name('getCart');
+// Route::get('reduce/{id}', [ItemController::class, 'getCart'])->name('getCart');
+
+// Route::get('reduce/{id}', [
+//     'uses' => 'productController@getReduceByOne',
+//     'as' => 'product.reduceByOne'
+// ]);
+// Route::get('remove/{id}', [
+//     'uses' => 'productController@getRemoveItem',
+//     'as' => 'product.remove'
+// ]);
 Route::resource('items', ItemController::class);

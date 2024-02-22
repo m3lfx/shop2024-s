@@ -44,14 +44,14 @@
     </div>
     </li>
     <li class="nav-link">
-        {{-- <a href="{{ route('shoppingCart') }}">
-            <i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping Cart
-            <span class="badge badge-secondary">{{ Session::has('cart') ? Session::get('cart')->totalQty : '' }}</span>
-        </a> --}}
-        <a href="#">
+        <a href="{{ route('getCart') }}">
             <i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping Cart
             <span class="badge badge-secondary">{{ Session::has('cart') ? Session::get('cart')->totalQty : '' }}</span>
         </a>
+        {{-- <a href="#">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping Cart
+            <span class="badge badge-secondary">{{ Session::has('cart') ? Session::get('cart')->totalQty : '' }}</span>
+        </a> --}}
     </li>
     </ul>
     {{-- <form action="{{ route('search') }}" "form-inline my-2 my-lg-0" method="POST"> --}}

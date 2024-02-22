@@ -166,7 +166,7 @@ class ItemController extends Controller
         return view('shop.index', compact('items'));
     }
 
-    public function addToCart(Request $request , $id){
+    public function addToCart($id){
         $item = Item::find($id);
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
       	// dd($oldCart);
@@ -181,5 +181,14 @@ class ItemController extends Controller
         // dd(Session::get('cart'));
       
         return redirect('/');
+    }
+
+    public function getCart() {
+        if (!Session::has('cart')) {
+            return view('shop.shopping-cart');
+        }
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
+        return view('shop.shopping-cart', ['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
     }
 }
