@@ -17,7 +17,7 @@ use App\Http\Controllers\ItemController;
 Route::get('/', [ItemController::class, 'getItems'])->name('getItems');
 Route::get('add-to-cart/{id}', [ItemController::class, 'addToCart'])->name('addToCart');
 Route::get('shopping-cart', [ItemController::class, 'getCart'])->name('getCart');
-// Route::get('reduce/{id}', [ItemController::class, 'getCart'])->name('getCart');
+Route::get('reduce/{id}', [ItemController::class, 'getReduceByOne'])->name('reduceByOne');
 
 // Route::get('reduce/{id}', [
 //     'uses' => 'productController@getReduceByOne',
