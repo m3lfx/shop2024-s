@@ -229,53 +229,59 @@ class ItemController extends Controller
     }
 
     public function postCheckout(Request $request){
-        if (!Session::has('cart')) {
-            return redirect()->route('getCart');
-        }
-        $oldCart = Session::get('cart');
-        $cart = new Cart($oldCart);
-        // dd($cart->items);
-        try {
-            DB::beginTransaction();
-            $order = new Order();
-
-            $customer =  Customer::where('user_id', Auth::id())->first();
-            // dd($cart->items);
-	        // $customer->orders()->save($order);
-            $order->customer_id = $customer->customer_id;
-            $order->date_placed = now();
-            $order->date_shipped = Carbon::now()->addDays(5);
-            // $order->shipvia = $request->shipper_id;
-            // $order->shipping = $request->shipping;
-            $order->shipping = 10.00  ;
-            $order->status = 'Processing';
-            $order->save();
-            // dd($cart->items);
-    	    foreach($cart->items as $items){
-        		$id = $items['item']['item_id'];
-                // dd($id);
-                DB::table('orderline')->insert(
-                    ['item_id' => $id, 
-                     'orderinfo_id' => $order->orderinfo_id,
-                     'quantity' => $items['qty']
-                    ]
-                    );
-        		
-                $stock = Stock::find($id);
-          		$stock->quantity = $stock->quantity - $items['qty'];
-         		$stock->save();
+        if(Auth::check()) {
+            if (!Session::has('cart')) {
+                return redirect()->route('getCart');
             }
-            // dd($order);
-        }
-        catch (\Exception $e) {
-            // dd($e->getMessage());
-	        DB::rollback();
-            // dd($order);
-            return redirect()->route('getCart')->with('error', $e->getMessage());
-        }
+            $oldCart = Session::get('cart');
+            $cart = new Cart($oldCart);
+            // dd($cart->items);
+            try {
+                DB::beginTransaction();
+                $order = new Order();
     
-        DB::commit();
-        Session::forget('cart');
-        return redirect('/')->with('success','Successfully Purchased Your Products!!!');
+                $customer =  Customer::where('user_id', Auth::id())->first();
+                // dd($cart->items);
+                // $customer->orders()->save($order);
+                $order->customer_id = $customer->customer_id;
+                $order->date_placed = now();
+                $order->date_shipped = Carbon::now()->addDays(5);
+                // $order->shipvia = $request->shipper_id;
+                // $order->shipping = $request->shipping;
+                $order->shipping = 10.00  ;
+                $order->status = 'Processing';
+                $order->save();
+                // dd($cart->items);
+                foreach($cart->items as $items){
+                    $id = $items['item']['item_id'];
+                    // dd($id);
+                    DB::table('orderline')->insert(
+                        ['item_id' => $id, 
+                         'orderinfo_id' => $order->orderinfo_id,
+                         'quantity' => $items['qty']
+                        ]
+                        );
+                    
+                    $stock = Stock::find($id);
+                      $stock->quantity = $stock->quantity - $items['qty'];
+                     $stock->save();
+                }
+                // dd($order);
+            }
+            catch (\Exception $e) {
+                // dd($e->getMessage());
+                DB::rollback();
+                // dd($order);
+                return redirect()->route('getCart')->with('error', $e->getMessage());
+            }
+        
+            DB::commit();
+            Session::forget('cart');
+            return redirect('/')->with('success','Successfully Purchased Your Products!!!');
+        }
+
+        else 
+            return redirect()->route('user.login')->with('info', 'login first to checkout');
+        
     }
 }
