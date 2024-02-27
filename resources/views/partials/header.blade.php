@@ -35,9 +35,9 @@
                         {{-- <a class="dropdown-item" href="{{ route('user.logout') }}">Logout </a> --}}
                         <a class="dropdown-item" href="#">Logout </a>
                     @else
-                        {{-- <a class="dropdown-item" href="{{ route('user.signup') }}">Signup </a>
-                        <a class="dropdown-item" href="{{ route('user.signin') }}">Signin </a> --}}
-                        <a class="dropdown-item" href="#">Signup </a>
+                        <a class="dropdown-item" href="{{ route('user.register') }}">Signup </a>
+                        {{-- <a class="dropdown-item" href="{{ route('user.signin') }}">Signin </a> --}}
+                        {{-- <a class="dropdown-item" href="#">Signup </a> --}}
                         <a class="dropdown-item" href="#}">Signin </a>
                     @endif
                 </div>
