@@ -31,5 +31,6 @@ Route::prefix('user')->group(function () {
     // Route::post('signin', [UserController::class,'postSignin'])->name('user.signin');
     // Route::get('profile', [UserController::class, 'getProfile'])->name('user.profile');
 });
+Route::get('logout', [UserController::class, 'logout'])->name('logout');
 Route::get('checkout', [ItemController::class, 'postCheckout'])->name('checkout');
 Route::resource('items', ItemController::class);

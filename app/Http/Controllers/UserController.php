@@ -37,4 +37,10 @@ class UserController extends Controller
         Auth::login($user);
         return redirect()->route('user.register')->with('success', 'you are registered');
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/');
+    }
 }

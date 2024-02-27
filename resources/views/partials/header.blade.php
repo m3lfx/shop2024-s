@@ -16,7 +16,7 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle"></i>
-                    User Management
+                    {{Auth::check() ? Auth::user()->name : ''}}
                 </a>
 
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -26,14 +26,14 @@
                         <a class="dropdown-item" href="#">Orders </a>
                         <a class="dropdown-item" href="#">User Profile</a>
                         <div class="dropdown-divider"></div>
-                        {{-- <a class="dropdown-item" href="{{ route('user.logout') }}">Logout </a> --}}
-                        <a class="dropdown-item" href="#">Logout </a>
+                        <a class="dropdown-item" href="{{ route('logout') }}">Logout </a>
+                        {{-- <a class="dropdown-item" href="#">Logout </a> --}}
                     @elseif (Auth::check())
                         {{-- <a class="dropdown-item" href="{{ route('user.profile') }}">User Profile</a> --}}
                         <a class="dropdown-item" href="#">User Profile</a>
                         <div class="dropdown-divider"></div>
-                        {{-- <a class="dropdown-item" href="{{ route('user.logout') }}">Logout </a> --}}
-                        <a class="dropdown-item" href="#">Logout </a>
+                        <a class="dropdown-item" href="{{ route('logout') }}">Logout </a>
+                        {{-- <a class="dropdown-item" href="#">Logout </a> --}}
                     @else
                         <a class="dropdown-item" href="{{ route('user.register') }}">Signup </a>
                         {{-- <a class="dropdown-item" href="{{ route('user.signin') }}">Signin </a> --}}
