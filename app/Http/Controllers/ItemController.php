@@ -187,7 +187,7 @@ class ItemController extends Controller
         Session::save();
         // dd(Session::get('cart'));
 
-        return redirect('/');
+        return redirect('/')->with('info', 'product added to cart');
     }
 
     public function getCart()
