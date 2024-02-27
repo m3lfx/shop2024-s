@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Auth;
 class DashboardController extends Controller
 {
     public function index() {
-        if (Auth::user()->role !== 'admin') {
-            return 'unauthorized';
+        if (Auth::user()->role === 'admin') {
+            return 'admin';
         }
-        return 'admin';
+        return 'unauthorized';
     }
 }

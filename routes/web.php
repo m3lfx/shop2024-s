@@ -36,3 +36,4 @@ Route::get('logout', [UserController::class, 'logout'])->name('logout');
 Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard.index')->middleware('auth');
 Route::get('checkout', [ItemController::class, 'postCheckout'])->name('checkout');
 Route::resource('items', ItemController::class);
+
