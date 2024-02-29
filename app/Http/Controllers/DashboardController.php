@@ -58,14 +58,17 @@ class DashboardController extends Controller
             ->join('orderline AS ol', 'o.orderinfo_id', '=', 'ol.orderinfo_id')
             ->join('item AS i', 'ol.item_id', '=', 'i.item_id')
             ->orderBy(DB::raw('month(o.date_placed)'), 'ASC')
-            ->groupBy('o.date_placed')
-            // dd($sales);
+            ->groupBy(DB::raw('monthname(o.date_placed)'))
             ->pluck(
                 DB::raw('sum(ol.quantity * i.sell_price) AS total'),
                 DB::raw('monthname(o.date_placed) AS month')
             )
+            // ->pluck(
+            //     DB::raw('sum(ol.quantity * i.sell_price) AS total'),
+            //     'month(o.date_placed)'
+            // )
             ->all();
-            // dd($sales);
+        // dd($sales);
         $salesChart = new SalesChart();
         $dataset = $salesChart->labels(array_keys($sales));
         $dataset = $salesChart->dataset(
@@ -79,7 +82,7 @@ class DashboardController extends Controller
             '#ff3838',
         ]);
         $customerChart->options([
-            'backgroundColor' =>'#fff',
+            'backgroundColor' => '#fff',
             'fill' => false,
             'responsive' => true,
             'legend' => ['display' => true],
