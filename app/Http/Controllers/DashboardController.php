@@ -7,9 +7,31 @@ use Auth;
 use DB;
 use App\Charts\CustomerChart;
 use App\Charts\SalesChart;
-
+use App\Charts\ItemChart;
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->bgcolor = collect([
+            '#7158e2',
+            '#3ae374',
+            '#ff3838',
+            "#FF851B",
+            "#7FDBFF",
+            "#B10DC9",
+            "#FFDC00",
+            "#001f3f",
+            "#39CCCC",
+            "#01FF70",
+            "#85144b",
+            "#F012BE",
+            "#3D9970",
+            "#111111",
+            "#AAAAAA",
+        ]);
+    }
+
+
     public function index()
     {
         if (Auth::user()->role !== 'admin') {
@@ -63,10 +85,6 @@ class DashboardController extends Controller
                 DB::raw('sum(ol.quantity * i.sell_price) AS total'),
                 DB::raw('monthname(o.date_placed) AS month')
             )
-            // ->pluck(
-            //     DB::raw('sum(ol.quantity * i.sell_price) AS total'),
-            //     'month(o.date_placed)'
-            // )
             ->all();
         // dd($sales);
         $salesChart = new SalesChart();
@@ -81,7 +99,7 @@ class DashboardController extends Controller
             '#3ae374',
             '#ff3838',
         ]);
-        $customerChart->options([
+        $salesChart->options([
             'backgroundColor' => '#fff',
             'fill' => false,
             'responsive' => true,
@@ -103,6 +121,61 @@ class DashboardController extends Controller
             ],
         ]);
 
-        return view('dashboard.index', compact('customerChart', 'salesChart'));
+        $items = DB::table('orderline AS ol')
+            ->join('item AS i', 'ol.item_id', '=', 'i.item_id')
+            ->groupBy('i.description')
+            ->orderBy('total', 'DESC')
+            ->pluck(DB::raw('sum(ol.quantity) AS total'), 'description')
+
+            ->all();
+        // dd($items);
+        $itemChart = new ItemChart();
+    // dd(array_values($customer));
+
+    $dataset = $itemChart->labels(array_keys($items));
+    // dd($dataset);
+    $dataset = $itemChart->dataset(
+        'Item sold',
+        'pie',
+        array_values($items)
+    );
+   
+    $dataset = $dataset->backgroundColor($this->bgcolor);
+   
+    $dataset = $dataset->fill(false);
+    $itemChart->options([
+        'responsive' => true,
+        'legend' => ['display' => true],
+        'tooltips' => ['enabled' => true],
+        'aspectRatio' => 1,
+
+        'scales' => [
+            'yAxes' => [
+                'display' => true,
+                'ticks' => ['beginAtZero' => true],
+                'gridLines' => ['display' => false],
+                'ticks' => [
+                    'beginAtZero' => true,
+                    'min' => 0,
+                    'stepSize' => 1,
+                ]
+            ],
+            'xAxes' => [
+                'categoryPercentage' => 0.8,
+                //'barThickness' => 100,
+                'barPercentage' => 1,
+
+                'gridLines' => ['display' => false],
+                'display' => true,
+                'ticks' => [
+                    'beginAtZero' => true,
+                    'min' => 0,
+                    'stepSize' => 1,
+                ],
+            ],
+        ],
+    ]);
+
+        return view('dashboard.index', compact('customerChart', 'salesChart', 'itemChart'));
     }
 }
